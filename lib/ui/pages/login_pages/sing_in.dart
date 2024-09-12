@@ -8,9 +8,11 @@ import 'package:bogcha/ui/pages/dashbord_pages/home_page.dart';
 import 'package:bogcha/ui/widgets/login_tile.dart';
 import 'package:bogcha/ui/widgets/loginbutton.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 
 class SignIn extends StatefulWidget {
+  static const String id='signin';
   const SignIn({super.key});
 
   @override
@@ -22,7 +24,9 @@ class _SignInState extends State<SignIn> {
   TextEditingController passwordController = TextEditingController();
   bool isVisible = true;
   bool loggedIn = true;
-
+void getToken(String token){
+ var tokens= Hive.box('token').put(1, token);
+}
   Future<void> signIn() async {
     final username = loginController.text;
     final password = passwordController.text;
@@ -38,12 +42,8 @@ class _SignInState extends State<SignIn> {
       headers: {'Content-Type': 'application/json'},
     );
     if (jsonDecode(response.body)['success'].toString()=='true') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HomePages(),
-        ),
-      );
+     getToken(jsonDecode(response.body)['token']);
+      Navigator.pushReplacementNamed(context, HomePages.id);
       log(response.body);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -57,6 +57,18 @@ class _SignInState extends State<SignIn> {
         ),
       );
     } else if(jsonDecode(response.body)['success'].toString()=='false') {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text(
+            'Error Occurred',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ),
+      );
+    }else{
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           backgroundColor: Colors.red,

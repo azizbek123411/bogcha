@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:bogcha/config/screen_utils.dart';
+import 'package:bogcha/ui/pages/login_pages/sing_in.dart';
 import 'package:flutter/material.dart';
 
 import '../../../config/app_padding.dart';
@@ -10,9 +11,9 @@ import '../../widgets/login_tile.dart';
 import '../../widgets/loginbutton.dart';
 import 'package:http/http.dart' as http;
 
-import '../dashbord_pages/home_page.dart';
 
 class SignUp extends StatefulWidget {
+  static const String id='signup';
   const SignUp({super.key});
 
   @override
@@ -48,13 +49,9 @@ class _SignUpState extends State<SignUp> {
       body: jsonEncode(body),
       headers: {'Content-Type': 'application/json'},
     );
-    if (jsonDecode(response.body)['success'].toString()=='true') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const HomePages(),
-        ),
-      );
+    if (jsonDecode(response.body)['success'].toString() == 'true' &&
+        centerController.text.isNotEmpty && phoneController.text.isNotEmpty) {
+      Navigator.pushReplacementNamed(context, SignIn.id);
       log(jsonDecode(response.body)['success'].toString());
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -67,7 +64,7 @@ class _SignUpState extends State<SignUp> {
           ),
         ),
       );
-    } else if(jsonDecode(response.body)['success'].toString()=='false') {
+    } else if (jsonDecode(response.body)['success'].toString() == 'false') {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           backgroundColor: Colors.red,
@@ -79,7 +76,7 @@ class _SignUpState extends State<SignUp> {
           ),
         ),
       );
-    }else{
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           backgroundColor: Colors.red,
@@ -133,11 +130,11 @@ class _SignUpState extends State<SignUp> {
                 },
                 icon: isVisiblePass
                     ? const Icon(
-                        Icons.visibility,
-                      )
+                  Icons.visibility,
+                )
                     : const Icon(
-                        Icons.visibility_off,
-                      ),
+                  Icons.visibility_off,
+                ),
               ),
             ),
             HBox(10.h),
@@ -153,11 +150,11 @@ class _SignUpState extends State<SignUp> {
                 },
                 icon: isVisibleConPass
                     ? const Icon(
-                        Icons.visibility,
-                      )
+                  Icons.visibility,
+                )
                     : const Icon(
-                        Icons.visibility_off,
-                      ),
+                  Icons.visibility_off,
+                ),
               ),
             ),
             HBox(10.h),

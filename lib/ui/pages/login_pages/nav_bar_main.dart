@@ -14,9 +14,8 @@ class MainNavBar extends StatefulWidget {
 
 class _MainNavBarState extends State<MainNavBar> {
   List pages = [
-    const SignIn(),
     const SignUp(),
-
+    const SignIn(),
   ];
   int initialIndex = 0;
 
@@ -41,7 +40,7 @@ class _MainNavBarState extends State<MainNavBar> {
               },
               color:initialIndex==0?Colors.green:Colors.white,
               w: 150.w,
-              text: 'Sing In',
+              text: 'Sing Up',
               h: 50.h,
               textColor: initialIndex==0?Colors.white:Colors.black,
             ),
@@ -53,7 +52,7 @@ class _MainNavBarState extends State<MainNavBar> {
               },
               color: initialIndex==1?Colors.green:Colors.white,
               w: 150.w,
-              text: 'Sign Up',
+              text: 'Sign In',
               h: 50.h,
               textColor: initialIndex==1?Colors.white:Colors.black,
             ),
